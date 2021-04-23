@@ -1,0 +1,49 @@
+version: "3.3"
+services:
+  nginx-reverse:
+    container_name: nginx-reverse
+    hostname: nginx-reverse
+    networks: 
+      - nginxProxy
+    image: arm32v7/nginx:latest
+    ports:
+      - 443:443
+    volumes:
+      - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./data/nginx/conf.d/:/etc/nginx/conf.d/:ro
+      - ./data/nginx/certs/live/:/etc/letsencrypt/live:ro
+      - ./data/nginx/certs/archive/:/etc/letsencrypt/archive:ro
+      - ./data/logs/:/var/log/nginx/
+
+  bitwarden:
+    image: bitwardenrs/server:latest
+    hostname: bitwarden
+    container_name: bitwarden
+    #user: "1000:1000"
+    networks:
+      - nginxProxy
+    secrets:
+      - bw_token
+      - domain
+    environment:
+      - ADMIN_TOKEN_FILE=/run/secrets/bw_token
+      - SIGNUPS_ALLOWED=false
+      - ROCKET_PORT=32400
+      - DOMAIN=/run/secrets/domain
+      - LOG_FILE=/etc/logs/bitwarden.log
+    expose: 
+      - "32400"
+      - "3012"
+    volumes:
+      - ./data/bitwarden:/data
+      - ./data/logs:/etc/logs
+    restart: on-failure
+
+secrets:
+  bw_token:                                                                                                           
+    file: /home/lukas/server_apps/secrets/bw_token.txt
+  domain:
+    file: /home/lukas/server_apps/secrets/domain.txt
+
+networks:
+ nginxProxy:
