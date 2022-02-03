@@ -19,7 +19,6 @@ services:
     image: bitwardenrs/server:latest
     hostname: bitwarden
     container_name: bitwarden
-    #user: "1000:1000"
     networks:
       - nginxProxy
     secrets:
