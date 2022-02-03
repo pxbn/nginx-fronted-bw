@@ -5,9 +5,9 @@ services:
     hostname: nginx-reverse
     networks: 
       - nginxProxy
-    image: arm32v7/nginx:latest
+    image: arm32v7/nginx:1.21.0
     ports:
-      - 443:443
+      - 62710:443
     volumes:
       - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./data/nginx/conf.d/:/etc/nginx/conf.d/:ro
@@ -16,10 +16,9 @@ services:
       - ./data/logs/:/var/log/nginx/
 
   bitwarden:
-    image: bitwardenrs/server:latest
+    image: vaultwarden/server:latest
     hostname: bitwarden
     container_name: bitwarden
-    #user: "1000:1000"
     networks:
       - nginxProxy
     secrets:
@@ -27,6 +26,7 @@ services:
       - domain
     environment:
       - ADMIN_TOKEN_FILE=/run/secrets/bw_token
+      - WEBSOCKET_ENABLED=true
       - SIGNUPS_ALLOWED=false
       - ROCKET_PORT=32400
       - DOMAIN=/run/secrets/domain
