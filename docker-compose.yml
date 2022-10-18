@@ -3,9 +3,7 @@ services:
   nginx-reverse:
     container_name: nginx-reverse
     hostname: nginx-reverse
-    networks: 
-      - nginxProxy
-    image: arm32v7/nginx:1.21.0
+    image: arm32v7/nginx:stable
     ports:
       - 62710:443
     volumes:
@@ -19,8 +17,6 @@ services:
     image: vaultwarden/server:latest
     hostname: bitwarden
     container_name: bitwarden
-    networks:
-      - nginxProxy
     secrets:
       - bw_token
       - domain
@@ -46,4 +42,6 @@ secrets:
     file: /home/lukas/server_apps/secrets/domain.txt
 
 networks:
- nginxProxy:
+  default:
+    name: nginxProxy
+    external: true
