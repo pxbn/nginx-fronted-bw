@@ -5,7 +5,7 @@ services:
     hostname: nginx-reverse
     image: arm32v7/nginx:stable
     ports:
-      - 62710:443
+      - :443
     volumes:
       - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./data/nginx/conf.d/:/etc/nginx/conf.d/:ro
