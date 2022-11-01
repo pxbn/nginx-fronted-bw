@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+    couchdb:
+        build: ./couchdb_image/
+        ports:
+            - ${COUCH_PORT}
+        volumes:
+            - ../data/couchdb/data:/home/couchdb/couchdb/data
+            - ../data/couchdb/conf/local.ini:/home/couchdb/couchdb/etc/local.ini
+
+networks:
+  default:
+    name: nginxProxy
+    external: true
