@@ -30,10 +30,10 @@ def main():
     except CalledProcessError as err: log_cleanup_error(err, "Failed to archive the data. Cleaning up.")
     print("archived files")
 
-    # Encrypt backup and key
-    encrypt_backup()
-    try: run(['openssl', 'rsautl', '-encrypt', '-pubin', '-inkey', 'secrets/config-dir-public-key.pem',
-              '-in', backup_path+"key.txt", '-out', backup_path+"enc.key.txt"], check=True)
+    enc_key = encrypt_backup()
+    # now encrypt&save the key
+    try: 
+        run(['openssl', 'rsautl', '-encrypt', '-pubin', '-inkey', 'secrets/config-dir-public-key.pem', '-out', backup_path+"enc.key.txt"], check=True, input=str(enc_key).encode())
     except CalledProcessError as err: log_cleanup_error(err, "Couldn't encrypt passphrase.")
     print("encrypted everything")
 
@@ -72,18 +72,18 @@ def move_files():
     run(['mv', backup_path + 'enc.server-image.tar.gz', gdrive_path], check=True)
 
 
-def encrypt_backup():
-    """ Create passphrase file and encrypt the server image with it.
+def encrypt_backup() -> str:
+    """ Create & return key, encrypt the server image with it.
     """
     chars = ascii_letters + digits + punctuation
-    with open(backup_path+"key.txt", "w") as file:
-        file.write(''.join(choices(chars, k=32)))
-        file.close()
+    key = ''.join(choices(chars, k=32))
     try:
-        run(['openssl', 'enc', '-aes-256-cbc', '-pbkdf2', '-pass', 'file:'+backup_path+"key.txt",
+        run(['openssl', 'enc', '-aes-256-cbc', '-pbkdf2', '-pass', 'pass:'+str(key),
              '-in', backup_path+'server-image.tar.gz', '-out', backup_path+'enc.server-image.tar.gz'], check=True)
     except CalledProcessError as err:
         log_cleanup_error(err, "Failed to encrypt the data.")
+    return key
+
 
 
 def copy_server_files():
