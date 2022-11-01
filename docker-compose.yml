@@ -1,3 +1,4 @@
+
 version: "3.3"
 services:
   nginx-reverse:
@@ -5,7 +6,7 @@ services:
     hostname: nginx-reverse
     image: arm32v7/nginx:stable
     ports:
-      - :443
+      - ${NGINX_PORT}:443
     volumes:
       - ./data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./data/nginx/conf.d/:/etc/nginx/conf.d/:ro
@@ -20,12 +21,13 @@ services:
     secrets:
       - bw_token
       - domain
+    env_file:
+      - ./.env
     environment:
       - ADMIN_TOKEN_FILE=/run/secrets/bw_token
       - WEBSOCKET_ENABLED=true
       - SIGNUPS_ALLOWED=false
       - ROCKET_PORT=32400
-      - DOMAIN=/run/secrets/domain
       - LOG_FILE=/etc/logs/bitwarden.log
     expose: 
       - "32400"
@@ -38,8 +40,6 @@ services:
 secrets:
   bw_token:                                                                                                           
     file: /home/lukas/server_apps/secrets/bw_token.txt
-  domain:
-    file: /home/lukas/server_apps/secrets/domain.txt
 
 networks:
   default:

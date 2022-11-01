@@ -1,4 +1,7 @@
 secrets/
 data/
+.env
+*.bak
+backupper/backups
 
 
