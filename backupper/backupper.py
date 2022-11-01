@@ -92,6 +92,8 @@ def copy_server_files():
     run(['cp', '-r', '../data', server_img_path], check=True)
     run(['cp', '-r', '../secrets', server_img_path], check=True)
     run(['cp', '../docker-compose.yml', server_img_path], check=True)
+    run(['cp', '-r' '../couchdb', server_img_path], check=True)
+    
 
 
 def log_cleanup_error(err: CalledProcessError, additional_info=''):
