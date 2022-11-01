@@ -1,7 +1,7 @@
-secrets/
-data/
 .env
 *.bak
+*.pem
+
 backupper/backups
 
 
