@@ -37,6 +37,15 @@ services:
       - ./data/logs:/etc/logs
     restart: on-failure
 
+  couchdb:
+      build: ./couchdb_image/
+      container_name: couchdb
+      ports:
+          - ${COUCH_PORT}
+      volumes:
+          - ./data/couchdb/data:/home/couchdb/couchdb/data
+          - ./data/couchdb/conf/local.ini:/home/couchdb/couchdb/etc/local.ini
+
 secrets:
   bw_token:                                                                                                           
     file: /home/lukas/server_apps/secrets/bw_token.txt
