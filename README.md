@@ -1,7 +1,7 @@
 # SSL Terminating NGINX reverse proxy with Vaultwarden and CouchDB as backend 
 ---
 ### To run the composition you need to:
-- Add your own NGINX configuration
+- Add your own NGINX configuration files to `./data/nginx/` (namely, the nginx.conf file as well as site configs, for the latter see the Vaultwarden repository with examples)
 - create .env file for the env variables DOMAIN, NGINX_PORT and COUCH_PORT
 
 Now, simply run docker compose for the services you want to start!
