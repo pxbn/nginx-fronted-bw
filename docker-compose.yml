@@ -20,7 +20,6 @@ services:
     container_name: bitwarden
     secrets:
       - bw_token
-      - domain
     env_file:
       - ./.env
     environment:
@@ -40,6 +39,7 @@ services:
   couchdb:
       build: ./couchdb_image/
       container_name: couchdb
+      hostname: couchdb
       ports:
           - ${COUCH_PORT}
       volumes:
