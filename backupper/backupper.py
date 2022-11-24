@@ -84,17 +84,12 @@ def encrypt_backup() -> str:
         log_cleanup_error(err, "Failed to encrypt the data.")
     return key
 
-
-
 def copy_server_files():
     server_img_path = backup_path+'server-image/'
     run(['mkdir', '-p', server_img_path], check=True)
     run(['cp', '-r', '../data', server_img_path], check=True)
     run(['cp', '-r', '../secrets', server_img_path], check=True)
-    run(['cp', '../docker-compose.yml', server_img_path], check=True)
-    run(['cp', '-r' '../couchdb', server_img_path], check=True)
-    
-
+    run(['cp', '../docker-compose.yml', server_img_path], check=True)    
 
 def log_cleanup_error(err: CalledProcessError, additional_info=''):
     try: run(['rm', '-rf', backup_path], check=True)
