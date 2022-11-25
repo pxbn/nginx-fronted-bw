@@ -42,7 +42,7 @@ def main():
     except CalledProcessError as err: log_cleanup_error(err, "Couldn't move the backup to the backups folder.")
     print("moved files")
     delete_old()
-    try: run(['rclone', 'sync', '--config', '/home/lukas/.config/rclone/rclone.conf', 'backups/', 'gdrive:/backups/'], check=True)
+    try: run(['rclone', 'copy', '--config', '/home/lukas/.config/rclone/rclone.conf', 'backups/', 'gdrive:/backups/'], check=True)
     except CalledProcessError as err:
         run(['rm', '-rf', './backups/'+today])
         log_cleanup_error(err, "Failed to synchronize with gdrive.")
